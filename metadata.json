@@ -1,0 +1,13 @@
+{
+    "name": "pixabay-searcher",
+    "description": "A simple app to search and download images from Pixabay",
+    "uuid": "pixabay-searcher@atareao.es",
+    "url": "https://github.com/atareao/pixabay-searcher",
+    "donations": {
+        "github": "atareao"
+    },
+    "shell-version": [
+        "47"
+    ],
+    "settings-schema": "org.gnome.shell.extensions.pixabay-searcher"
+}
