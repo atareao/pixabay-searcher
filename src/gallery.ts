@@ -35,7 +35,6 @@ export default class Gallery extends PopupMenu.PopupBaseMenuItem {
         this._box.remove_all_children();
         this._box.destroy_all_children();
         images.forEach((image) => {
-            console.log("[PSI]", `Adding image: ${image.previewURL}`);
             this._box.add_child(new ImageBox(image))
         });
     }

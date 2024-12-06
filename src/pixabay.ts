@@ -74,7 +74,6 @@ export class Pixabay {
             if(bytes !== null){
                 const response = (new TextDecoder())
                     .decode(bytes.get_data()?.buffer);
-                console.log("[PSI]", "Response: ", response);
                 const pixabayResponse: PixabayResponse = JSON.parse(response);
                 return pixabayResponse;
             }

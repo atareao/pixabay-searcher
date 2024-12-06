@@ -16,7 +16,6 @@ export default class ImageBox extends St.BoxLayout {
             width: 200,
         });
         const gicon = Gio.icon_new_for_string(image.previewURL);
-        console.log("[PSI]", `${image.previewWidth}x${image.previewHeight}`);
         const icon = new St.Icon({
             gicon: gicon,
             width: image.previewWidth,

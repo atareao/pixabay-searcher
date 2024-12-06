@@ -7,14 +7,13 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 import { Pixabay } from './pixabay.js';
 import Gallery from './gallery.js';
-import ImageBox from './imagebox.js';
+import Pager from './pager.js';
 
 export default class Indicator extends PanelMenu.Button {
     _extension: Extension;
     _pixabay: Pixabay;
     _gallery: Gallery;
-    _page: number = 1;
-    _pages: number = 1;
+    _pager: Pager;
     static {
         GObject.registerClass(this);
     }
@@ -37,7 +36,9 @@ export default class Indicator extends PanelMenu.Button {
             console.log(`[PSI] Settings changed: ${apiKey} - ${lang}`);
             this._pixabay = new Pixabay(apiKey, lang);
         });
+        this._pager = new Pager(1);
         (this.menu as PopupMenu.PopupMenu).addMenuItem(this._getEntry());
+        (this.menu as PopupMenu.PopupMenu).addMenuItem(this._pager);
         (this.menu as PopupMenu.PopupMenu).addMenuItem(this._gallery);
     }
 
@@ -77,12 +78,24 @@ export default class Indicator extends PanelMenu.Button {
           marginLeft: 30,
           styleClass: "SearchButton",
         });
-        searchButton.connect('clicked', async () => {
+        this._pager.connect('page-changed', async () => {
             const searchText = searchEntry.get_text();
             console.log(`[PSI] Searching for: ${searchText}`);
-            const response = await this._pixabay.search(searchText, this._page, new Gio.Cancellable());
+            const page = this._pager.getPage();
+            const response = await this._pixabay.search(searchText, page, new Gio.Cancellable());
             if(response != null) {
-                this._pages = Math.ceil(response.totalHits / 20);
+                this._pager.setPages(Math.ceil(response.totalHits / 20));
+                console.log(`[PSI] Found: ${response.totalHits}`);
+                this._gallery.setImages(response.hits);
+            }
+        });
+        searchButton.connect('clicked', async () => {
+            const searchText = searchEntry.get_text();
+            const page = this._pager.getPage();
+            console.log(`[PSI] Searching for: ${searchText}. Page: ${page}`);
+            const response = await this._pixabay.search(searchText, page, new Gio.Cancellable());
+            if(response != null) {
+                this._pager.setPages(Math.ceil(response.totalHits / 20));
                 console.log(`[PSI] Found: ${response.totalHits}`);
                 this._gallery.setImages(response.hits);
             }
@@ -92,5 +105,4 @@ export default class Indicator extends PanelMenu.Button {
         menuItem.add_child(vbox);
         return menuItem;
     }
-
 }
