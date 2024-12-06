@@ -23,16 +23,13 @@ export default class Gallery extends PopupMenu.PopupBaseMenuItem {
             style_class: 'popup-combobox-item',
             x_expand: true,
             y_expand: false,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.CENTER,
         });
         const scrollView = new St.ScrollView({
             reactive: true,
             can_focus: false,
             x_expand: true,
             y_expand: false,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.CENTER,
+            styleClass: "ScrollView",
         });
         scrollView.add_child(this._box);
         this.add_child(scrollView);

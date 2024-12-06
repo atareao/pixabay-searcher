@@ -29,7 +29,17 @@
 }
 .ImageBox {
     background-color: #3c3c3c;
+    max-height: 150px;
+}
+.ImageBox,
+.ImageContainer,
+.Image {
+    padding: 0px;
+    margin: 0px;
 }
 .ImageBox:hover{
-    background-color: #3c3c3c;
+    background-color: rgba(120, 120, 120, 1);
+}
+.ScrollView{
+    max-height: 500px;
 }
