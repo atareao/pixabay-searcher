@@ -1,6 +1,14 @@
-.DownloadButton,
+.RightButton,
 .SearchButton {
     margin-left: 30px;
+}
+.LeftButton {
+    margin-right: 30px;
+}
+.LeftButton,
+.RightButton,
+.DownloadButton,
+.SearchButton {
     background-color: #3c3c3c;
     color: #eeeeec;
     border-radius: 32px;
@@ -8,10 +16,20 @@
     height: 32px;
     border: 1px solid #282828;
 }
+.LeftButton:hover,
+.LeftButton:focus,
+.RightButton:hover,
+.RightButton:focus,
 .DownloadButton:hover,
 .DownloadButton:focus,
 .SearchButton:hover,
 .SearchButton:focus {
   background-color: rgba(120, 120, 120, 1);
   color: #ffffff;
+}
+.ImageBox {
+    background-color: #3c3c3c;
+}
+.ImageBox:hover{
+    background-color: #3c3c3c;
 }

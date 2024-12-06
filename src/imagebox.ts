@@ -13,17 +13,24 @@ export default class ImageBox extends St.BoxLayout {
             vertical: false,
             style_class: 'popup-combobox-item',
             height: 150,
-            width: 200,
+            x_expand: true,
+            y_expand: false,
+            styleClass: "ImageBox",
         });
         const gicon = Gio.icon_new_for_string(image.previewURL);
         const icon = new St.Icon({
             gicon: gicon,
             width: image.previewWidth,
             height: image.previewHeight,
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER,
+            styleClass: "Image",
         });
         const container = new Clutter.Actor({
             width: 150,
             height: 150,
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         container.add_child(icon);
         this.add_child(container);
@@ -35,9 +42,7 @@ export default class ImageBox extends St.BoxLayout {
             icon_name: "folder-download-symbolic",
             icon_size: 16,
           }),
-          x_expand: true,
-          y_expand: true,
-          x_align: Clutter.ActorAlign.CENTER,
+          x_align: Clutter.ActorAlign.END,
           y_align: Clutter.ActorAlign.CENTER,
           styleClass: "DownloadButton",
         });
