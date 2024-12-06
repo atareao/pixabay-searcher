@@ -13,6 +13,8 @@ export default class Indicator extends PanelMenu.Button {
     _extension: Extension;
     _pixabay: Pixabay;
     _gallery: Gallery;
+    _page: number = 1;
+    _pages: number = 1;
     static {
         GObject.registerClass(this);
     }
@@ -78,8 +80,12 @@ export default class Indicator extends PanelMenu.Button {
         searchButton.connect('clicked', async () => {
             const searchText = searchEntry.get_text();
             console.log(`[PSI] Searching for: ${searchText}`);
-            const images = await this._pixabay.search(searchText, 1, new Gio.Cancellable());
-            this._gallery.setImages(images);
+            const response = await this._pixabay.search(searchText, this._page, new Gio.Cancellable());
+            if(response != null) {
+                this._pages = Math.ceil(response.totalHits / 20);
+                console.log(`[PSI] Found: ${response.totalHits}`);
+                this._gallery.setImages(response.hits);
+            }
         });
         hbox.add_child(searchButton);
         vbox.add_child(hbox);

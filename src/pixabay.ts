@@ -12,7 +12,7 @@ Gio._promisify(Soup.Session.prototype, "send_and_read_async",
 Gio._promisify(Gio.File.prototype, "replace_contents_bytes_async",
                "replace_contents_finish");
 
-interface PixabayResponse {
+export interface PixabayResponse {
     total: number;
     totalHits: number;
     hits: PixabayImage[];
@@ -54,7 +54,7 @@ export class Pixabay {
         this._lang = lang;
     }
 
-    async search(query: string, page: number, cancellable: Gio.Cancellable): Promise<PixabayImage[]>{
+    async search(query: string, page: number, cancellable: Gio.Cancellable): Promise<PixabayResponse | null>{
         console.log("[PSI]", `Looking for: ${query}`);
         try{
             const session = new Soup.Session();
@@ -65,6 +65,7 @@ export class Pixabay {
                     key: this._key,
                     lang: this._lang,
                     page: page.toString(),
+                    per_page: "20",
                     q: query
                 })
             );
@@ -75,13 +76,13 @@ export class Pixabay {
                     .decode(bytes.get_data()?.buffer);
                 console.log("[PSI]", "Response: ", response);
                 const pixabayResponse: PixabayResponse = JSON.parse(response);
-                return pixabayResponse.hits;
+                return pixabayResponse;
             }
         }catch(e){
             console.error("[PSI]", "Error: ", e);
             throw new Error(`Error: ${e}`);
         }
-        return [];
+        return null;
     }
 
 
