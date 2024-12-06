@@ -1,0 +1,17 @@
+.DownloadButton,
+.SearchButton {
+    margin-left: 30px;
+    background-color: #3c3c3c;
+    color: #eeeeec;
+    border-radius: 32px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #282828;
+}
+.DownloadButton:hover,
+.DownloadButton:focus,
+.SearchButton:hover,
+.SearchButton:focus {
+  background-color: rgba(120, 120, 120, 1);
+  color: #ffffff;
+}

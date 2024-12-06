@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schemalist>
     <schema id="org.gnome.shell.extensions.pixabay-searcher" path="/org/gnome/shell/extensions/pixabay-searcher/">
-    <key name="padding-inner" type="i">
-      <default>8</default>
-      <summary>Inner padding</summary>
-      <description>Padding between windows</description>
+    <key name="pixabay-api-key" type="s">
+      <default>""</default>
+      <summary>API key</summary>
+      <description>Pixabay API key</description>
     </key>
-    <key name="animate" type="b">
-      <default>true</default>
-      <summary>Animation</summary>
-      <description>Whether to animate window movement/resizing</description>
+    <key name="lang" type="s">
+      <default>"en"</default>
+      <summary>Language</summary>
+      <description>Language for searchs</description>
     </key>
   </schema>
 </schemalist>
