@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/org/gnome/shell/extensions/pixabay-searcher">
+        <file compressed="true" preprocess="xml-stripblanks" alias="icons/scalable/categories/pixabay-searcher-pixabay">icons/pixabay.svg</file>
+        <file compressed="true" preprocess="xml-stripblanks" alias="icons/scalable/categories/pixabay-searcher-right-small-symbolic">icons/right-small-symbolic.svg</file>
+        <file compressed="true" preprocess="xml-stripblanks" alias="icons/scalable/categories/pixabay-searcher-left-small-symbolic">icons/left-small-symbolic.svg</file>
+    </gresource>
+</gresources>
