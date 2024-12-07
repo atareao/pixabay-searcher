@@ -2,6 +2,7 @@ import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import { getIcon } from './utils.js';
 
 export default class Pager extends PopupMenu.PopupBaseMenuItem {
     static {
@@ -39,7 +40,7 @@ export default class Pager extends PopupMenu.PopupBaseMenuItem {
             can_focus: false,
             track_hover: true,
             child: new St.Icon({
-                icon_name: "arrow1-left-symbolic",
+                gicon: getIcon("left-small-symbolic"),
                 icon_size: 16,
             }),
             x_expand: true,
@@ -56,7 +57,7 @@ export default class Pager extends PopupMenu.PopupBaseMenuItem {
             can_focus: false,
             track_hover: true,
             child: new St.Icon({
-                icon_name: "right-symbolic",
+                gicon: getIcon("right-small-symbolic"),
                 icon_size: 16,
             }),
             x_expand: true,
@@ -79,20 +80,35 @@ export default class Pager extends PopupMenu.PopupBaseMenuItem {
     getPage() {
         return this._page;
     }
+    reset() {
+        this._page = 1;
+        this._pages = 1;
+        this._leftButton.set_reactive(false);
+        this._rightButton.set_reactive(false);
+    }
+
+    incPage() {
+        this.setPage(this._page + 1);
+    }
+
     setPage(page: number) {
         console.log(`[PSI] Setting page: ${page}`);
         const oldPage = this._page;
         this._page = page;
         if (this._page <= 1) {
             this._page = 1;
+            this._leftButton.set_opacity(80);
             this._leftButton.set_reactive(false);
         } else {
+            this._leftButton.set_opacity(255);
             this._leftButton.set_reactive(true);
         }
         if (this._page >= this._pages) {
             this._page = this._pages;
+            this._rightButton.set_opacity(80);
             this._rightButton.set_reactive(false);
         } else {
+            this._rightButton.set_opacity(255);
             this._rightButton.set_reactive(true);
         }
         this._entry.set_text(this._page.toString());

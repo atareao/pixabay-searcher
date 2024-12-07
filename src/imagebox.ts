@@ -11,7 +11,7 @@ export default class ImageBox extends St.BoxLayout {
     constructor(image: PixabayImage) {
         super({
             vertical: false,
-            height: 150,
+            //height: 150,
             x_expand: true,
             y_expand: false,
             styleClass: "ImageBox",
@@ -20,20 +20,26 @@ export default class ImageBox extends St.BoxLayout {
             track_hover: true,
         });
         const gicon = Gio.icon_new_for_string(image.previewURL);
+        const size = image.previewWidth > image.previewHeight?image.previewWidth:image.previewHeight;
         const icon = new St.Icon({
             gicon: gicon,
-            width: image.previewWidth,
-            height: image.previewHeight,
+            //width: image.previewWidth,
+            //height: image.previewHeight,
+            icon_size: size,
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
             styleClass: "Image",
         });
         const container = new Clutter.Actor({
+            width: size,
+            height: size,
+            /*
             width: 150,
             height: 150,
+            */
             x_expand: true,
-            x_align: Clutter.ActorAlign.START,
+            x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER,
         });
         container.add_child(icon);

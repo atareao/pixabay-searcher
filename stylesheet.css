@@ -5,6 +5,9 @@
 .LeftButton {
     margin-right: 30px;
 }
+.DownloadButton {
+    margin-right: 10px;
+}
 .LeftButton,
 .RightButton,
 .DownloadButton,
@@ -15,6 +18,10 @@
     width: 32px;
     height: 32px;
     border: 1px solid #282828;
+}
+.LeftButton:disabled{
+  background-color: #ff0000;
+  color: #ff0000;
 }
 .LeftButton:hover,
 .LeftButton:focus,
@@ -29,7 +36,6 @@
 }
 .ImageBox {
     background-color: #3c3c3c;
-    max-height: 150px;
 }
 .ImageBox,
 .ImageContainer,
@@ -43,3 +49,11 @@
 .ScrollView{
     max-height: 500px;
 }
+.ImageBox {
+    margin-bottom: 10px;
+}
+.LeftButton,
+.RightButton {
+    color: #ff0000;
+}
+
