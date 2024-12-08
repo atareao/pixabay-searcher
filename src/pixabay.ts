@@ -46,28 +46,43 @@ export interface PixabayImage {
 
 export class Pixabay {
     private baseUrl = "htps://pixabay.com/api/";
-    private _key: string | null = null;
-    private _lang: string | null = null;
+    private _key: string;
+    private _lang: string;
 
     constructor(key: string, lang: string){
         this._key = key;
         this._lang = lang;
     }
 
-    async search(query: string, page: number, cancellable: Gio.Cancellable): Promise<PixabayResponse | null>{
+    async search(query: string, page: number, imageType: string, 
+                 orientation: string, order: string, category: string,
+                 color: string, cancellable: Gio.Cancellable
+                ): Promise<PixabayResponse | null>{
         console.log("[PSI]", `Looking for: ${query}`);
         try{
             const session = new Soup.Session();
+            let params = new Map([
+                ["key", this._key],
+                ["lang", this._lang],
+                ["page", page.toString()],
+                ["per_page", "20"],
+                ["q", query],
+                ["image_type", imageType],
+                ["orientation", orientation],
+                ["order", order],
+            ]);
+            if(category != "any"){
+                params.set("category", category);
+            }
+            if(color != "any"){
+                params.set("color", color);
+            }
+            const encoded_params = Soup.form_encode_hash(Object.fromEntries(params));
+            console.log("[PSI]", `Params: ${encoded_params}`);
             const message = Soup.Message.new_from_encoded_form(
                 'GET',
                 this.baseUrl,
-                Soup.form_encode_hash({
-                    key: this._key,
-                    lang: this._lang,
-                    page: page.toString(),
-                    per_page: "20",
-                    q: query
-                })
+                encoded_params
             );
             const bytes = await session.send_and_read_async(message,
                 GLib.PRIORITY_DEFAULT, cancellable);

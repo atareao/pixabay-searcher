@@ -1,7 +1,5 @@
 import GObject from 'gi://GObject';
 import St from 'gi://St';
-import Gtk from 'gi://Gtk';
-import Gdk from 'gi://Gdk?version=4.0';
 import Gio from 'gi://Gio';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
@@ -56,25 +54,30 @@ export default class Indicator extends PanelMenu.Button {
                 this._pager.reset();
                 this._search = text;
             }
-            const page = this._pager.getPage();
-            const response = await this._pixabay.search(text, page, new Gio.Cancellable());
-            if(response != null) {
-                this._pager.setPages(Math.ceil(response.totalHits / 20));
-                console.log(`[PSI] Found: ${response.totalHits}`);
-                this._gallery.setImages(response.hits);
-            }
+            await this.search(text);
         });
 
         this._pager.connect('page-changed', async () => {
             const searchText = this._searchBox.getText();
+            await this.search(searchText);
+        });
+    }
+
+    private async search(searchText: string): Promise<void> {
             console.log(`[PSI] Searching for: ${searchText}`);
             const page = this._pager.getPage();
-            const response = await this._pixabay.search(searchText, page, new Gio.Cancellable());
+            const imageType = this._extension.getSettings().get_string("image-type");
+            const orientation = this._extension.getSettings().get_string("orientation");
+            const category = this._extension.getSettings().get_string("category");
+            const color = this._extension.getSettings().get_string("color");
+            const order = this._extension.getSettings().get_string("order");
+            const response = await this._pixabay.search(
+                searchText, page, imageType, orientation, order, category,
+                color, new Gio.Cancellable());
             if(response != null) {
                 this._pager.setPages(Math.ceil(response.totalHits / 20));
                 console.log(`[PSI] Found: ${response.totalHits}`);
                 this._gallery.setImages(response.hits);
             }
-        });
     }
 }

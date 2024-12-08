@@ -7,9 +7,34 @@
       <description>Pixabay API key</description>
     </key>
     <key name="lang" type="s">
-      <default>"en"</default>
+      <default>"es"</default>
       <summary>Language</summary>
       <description>Language for searchs</description>
+    </key>
+    <key name="image-type" type="s">
+      <default>"all"</default>
+      <summary>Image type</summary>
+      <description>Image type</description>
+    </key>
+    <key name="orientation" type="s">
+      <default>"all"</default>
+      <summary>Orientation</summary>
+      <description>Orientation</description>
+    </key>
+    <key name="category" type="s">
+      <default>"any"</default>
+      <summary>Category</summary>
+      <description>Category</description>
+    </key>
+    <key name="color" type="s">
+      <default>"any"</default>
+      <summary>Color</summary>
+      <description>Color</description>
+    </key>
+    <key name="order" type="s">
+      <default>"popular"</default>
+      <summary>Order</summary>
+      <description>Order</description>
     </key>
   </schema>
 </schemalist>
