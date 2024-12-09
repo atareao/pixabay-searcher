@@ -13,7 +13,6 @@
 .DownloadButton,
 .SearchButton {
     background-color: #3c3c3c;
-    color: #eeeeec;
     border-radius: 32px;
     width: 32px;
     height: 32px;
@@ -52,8 +51,3 @@
 .ImageBox {
     margin-bottom: 10px;
 }
-.LeftButton,
-.RightButton {
-    color: #ff0000;
-}
-

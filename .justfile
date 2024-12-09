@@ -32,12 +32,12 @@ gresource:
 
 schemas:
     @glib-compile-schemas schemas
-    @glib-compile-resources --sourcedir ./assets/ --target data/{{ NAME }}.gresource data/{{ NAME }}.gresource.xml
+    #@glib-compile-resources --sourcedir ./assets/ --target data/{{ NAME }}.gresource data/{{ NAME }}.gresource.xml
 
 
 make:
-    @just clean build compile gresource schemas
-    @cp -r data dist/
+    @just clean build compile schemas
+    @cp -r icons dist/
     @cp -r schemas dist/
     @cp stylesheet.css dist/
     @cp metadata.json dist/

@@ -1,16 +1,34 @@
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
-import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import Gtk from 'gi://Gtk';
+import { ExtensionPreferences,gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import DropDownText from './dropdowntext.js';
+import About from './about.js';
+interface WindowSettingRegistry {
+    _settings: Gio.Settings
+}
 
-export default class GnomeRectanglePreferences extends ExtensionPreferences {
+export default class PixabaySearcherPreferences extends ExtensionPreferences {
     _settings?: Gio.Settings
 
 
-    override async fillPreferencesWindow(window: Adw.PreferencesWindow) {
+    override async fillPreferencesWindow(window: Adw.PreferencesWindow & WindowSettingRegistry) {
         this._settings = this.getSettings();
 
-        const page = new Adw.PreferencesPage({
+        const iconTheme = Gtk.IconTheme.get_for_display(window.get_display());
+        const iconsDirectory = this.dir.get_child('icons').get_path();
+        if(iconsDirectory){
+            console.log(`Adding ${iconsDirectory} to the icon theme search path`);
+            iconTheme.add_search_path(iconsDirectory);
+        }
+
+        window.add(this.buildGeneralPage());
+        const about = new About(this);
+        window.add(about);
+    }
+
+    private buildGeneralPage(): Adw.PreferencesPage {
+        const generalPage = new Adw.PreferencesPage({
             title: _('General'),
             iconName: 'dialog-information-symbolic',
         });
@@ -19,7 +37,7 @@ export default class GnomeRectanglePreferences extends ExtensionPreferences {
             title: _('Pixabay'),
             description: _('Set Pixabay data'),
         });
-        page.add(pixabayInfo);
+        generalPage.add(pixabayInfo);
 
         const apiKey = new Adw.EntryRow({
             title: _('API key'),
@@ -88,7 +106,6 @@ export default class GnomeRectanglePreferences extends ExtensionPreferences {
         const order = new DropDownText(_("Order"), orders);
         pixabayInfo.add(order);
 
-        window.add(page)
 
         this._settings!.bind('pixabay-api-key', apiKey, 'text', Gio.SettingsBindFlags.DEFAULT);
         this._settings!.bind('lang', lang, 'selected', Gio.SettingsBindFlags.DEFAULT);
@@ -97,5 +114,7 @@ export default class GnomeRectanglePreferences extends ExtensionPreferences {
         this._settings!.bind('category', category, 'selected', Gio.SettingsBindFlags.DEFAULT);
         this._settings!.bind('color', color, 'selected', Gio.SettingsBindFlags.DEFAULT);
         this._settings!.bind('order', order, 'selected', Gio.SettingsBindFlags.DEFAULT);
+
+        return generalPage;
     }
 }

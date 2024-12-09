@@ -23,14 +23,16 @@ export default class Indicator extends PanelMenu.Button {
     constructor(extension: Extension) {
         super(0.0, extension.metadata.name, false);
 
+
         this._extension = extension;
+
         const apiKey = extension.getSettings().get_string("pixabay-api-key");
         const lang = extension.getSettings().get_string("lang");
         this._pixabay = new Pixabay(apiKey, lang);
         this._gallery = new Gallery({});
 
         const icon = new St.Icon({
-            gicon: getIcon('pixabay'),
+            gicon: getIcon('pixabay-symbolic'),
             style_class: 'system-status-icon',
         });
         this.add_child(icon);

@@ -1,9 +1,7 @@
 import Gio from 'gi://Gio';
-export const APP = "pixabay-searcher";
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
-export function getIcon(str: string): Gio.Icon {
-
-    return Gio.Icon.new_for_string(
-        `resource:////org/gnome/shell/extensions/${APP}/icons/scalable/categories/${APP}-${str}`
-    );
+export function getIcon(icon_name: string): Gio.Icon {
+    const path = Extension.lookupByURL(import.meta.url)?.path;
+    return Gio.icon_new_for_string(`${path}/icons/${icon_name}.svg`);
 }

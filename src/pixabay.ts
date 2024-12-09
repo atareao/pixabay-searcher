@@ -100,7 +100,7 @@ export class Pixabay {
     }
 
 
-    static async download(image: PixabayImage, cancellable: Gio.Cancellable): Promise<void>{
+    static async download(image: PixabayImage, cancellable: Gio.Cancellable): Promise<string|null>{
         console.log("[PSI]", `Downloading: ${image.tags}`);
         console.log("[PSI]", `Downloading: ${image.imageURL}`);
         console.log("[PSI]", `Downloading: ${image.id}`);
@@ -126,10 +126,12 @@ export class Pixabay {
                     Gio.FileCreateFlags.REPLACE_DESTINATION,
                     null);
                 console.log("[PSI]", "Response: ", response);
+                return file.get_path();
             }
         }catch(e){
             console.error("[PSI]", "Error: ", e);
             throw new Error(`Error: ${e}`);
         }
+        return null;
     }
 }

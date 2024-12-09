@@ -41,7 +41,8 @@ export default class Pager extends PopupMenu.PopupBaseMenuItem {
             track_hover: true,
             child: new St.Icon({
                 gicon: getIcon("left-small-symbolic"),
-                icon_size: 16,
+                icon_size: 24,
+                style_class: 'system-status-icon',
             }),
             x_expand: true,
             y_expand: true,
@@ -58,7 +59,8 @@ export default class Pager extends PopupMenu.PopupBaseMenuItem {
             track_hover: true,
             child: new St.Icon({
                 gicon: getIcon("right-small-symbolic"),
-                icon_size: 16,
+                icon_size: 24,
+                style_class: 'system-status-icon',
             }),
             x_expand: true,
             y_expand: true,

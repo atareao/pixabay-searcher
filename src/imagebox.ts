@@ -2,6 +2,7 @@ import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Gio from 'gi://Gio';
 import Clutter from 'gi://Clutter';
+import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 import { Pixabay, PixabayImage } from './pixabay.js';
 
 export default class ImageBox extends St.BoxLayout {
@@ -61,9 +62,26 @@ export default class ImageBox extends St.BoxLayout {
             console.log(`[PSI] Downloading: ${image.tags}`);
             console.log(`[PSI] Downloading: ${image.imageURL}`);
             console.log(`[PSI] Downloading: ${image.id}`);
-            await Pixabay.download(image, new Gio.Cancellable());
+            const file = await Pixabay.download(image, new Gio.Cancellable());
+            if(file){
+                this._createNotification("Pixabay Searcher", `Downloaded image ${file}`);
+            }else{
+                this._createNotification("Pixabay Searcher", "Can NOT download image");
+            }
         });
         this.add_child(downloadButton);
+    }
+
+    _createNotification(title: string, body: string) {
+        const systemSource = MessageTray.getSystemSource();
+        const notification = new MessageTray.Notification({
+            source: systemSource,
+            title: title,
+            body: body,
+            gicon: new Gio.ThemedIcon({name: 'image-x-generic'}),
+            iconName: 'image-x-generic',
+        });
+        systemSource.addNotification(notification);
     }
 }
 
