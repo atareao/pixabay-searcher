@@ -1,5 +1,4 @@
 import GObject from 'gi://GObject';
-import Clutter from 'gi://Clutter';
 import St from 'gi://St';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import { PixabayImage } from './pixabay.js';

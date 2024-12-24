@@ -41,13 +41,12 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
         generalPage.add(generalInfo);
 
         const formats = [
-            ["no", "NO"], ["png", "PNG"], ["jpg", "JPG"]
+            ["no", _("None")], ["png", _("PNG")], ["jpg", _("JPG")],
+            ["webp", _("WEBP")]
         ];
         const format = new DropDownText(_("Format"), formats);
-
-
         generalInfo.add(format);
-
+        this._settings!.bind('image-format', format, 'selected', Gio.SettingsBindFlags.DEFAULT);
         return generalPage;
     }
     private buildPixabayPage(): Adw.PreferencesPage {

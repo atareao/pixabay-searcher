@@ -28,7 +28,7 @@ export default class Indicator extends PanelMenu.Button {
 
         const apiKey = extension.getSettings().get_string("pixabay-api-key");
         const lang = extension.getSettings().get_string("lang");
-        const format = extension.getSettings().get_string("format");
+        const format = extension.getSettings().get_string("image-format");
         const directory = extension.getSettings().get_string("directory");
         this._pixabay = new Pixabay(apiKey, lang);
         this._gallery = new Gallery({}, format, directory);
@@ -75,8 +75,6 @@ export default class Indicator extends PanelMenu.Button {
             const category = this._extension.getSettings().get_string("category");
             const color = this._extension.getSettings().get_string("color");
             const order = this._extension.getSettings().get_string("order");
-            const format = this._extension.getSettings().get_string("format");
-            const directory = this._extension.getSettings().get_string("directory");
             const response = await this._pixabay.search(
                 searchText, page, imageType, orientation, order, category,
                 color, new Gio.Cancellable());

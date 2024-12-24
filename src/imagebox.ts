@@ -26,7 +26,7 @@ export default class ImageBox extends St.BoxLayout {
         this._format = format;
         this._directory = directory
         const gicon = Gio.icon_new_for_string(image.previewURL);
-        const size = image.previewWidth > image.previewHeight?image.previewWidth:image.previewHeight;
+        const size = image.previewWidth > image.previewHeight ? image.previewWidth : image.previewHeight;
         const icon = new St.Icon({
             gicon: gicon,
             //width: image.previewWidth,
@@ -54,35 +54,39 @@ export default class ImageBox extends St.BoxLayout {
             reactive: true,
             can_focus: true,
             track_hover: true,
-          child: new St.Icon({
-            icon_name: "folder-download-symbolic",
-            icon_size: 16,
-          }),
-          x_expand: false,
-          x_align: Clutter.ActorAlign.END,
-          y_align: Clutter.ActorAlign.CENTER,
-          styleClass: "DownloadButton",
+            child: new St.Icon({
+                icon_name: "folder-download-symbolic",
+                icon_size: 16,
+            }),
+            x_expand: false,
+            x_align: Clutter.ActorAlign.END,
+            y_align: Clutter.ActorAlign.CENTER,
+            styleClass: "DownloadButton",
         });
         downloadButton.connect('clicked', async () => {
             console.log(`[PSI] Downloading: ${image.tags}`);
             console.log(`[PSI] Downloading: ${image.imageURL}`);
             console.log(`[PSI] Downloading: ${image.id}`);
             const file = await Pixabay.download(image, new Gio.Cancellable());
-            if(!file){
+            if (!file) {
                 this._createNotification("Pixabay Searcher", "Can NOT download image");
                 return;
             }
             this._createNotification("Pixabay Searcher", `Downloaded image ${file}`);
-            if(this._format === "PNG" && !file.endsWith(".png")){
-                const response = Conversor.convert(file, "png", new Gio.Cancellable());
-                console.log(response);
-                Gio.File.new_for_path(file).delete(null);
-                this._createNotification("Pixabay Searcher", `Saved image as PNG`);
-            }else if(this._format === "JPG" && !file.endsWith(".jpg")){
-                const response = Conversor.convert(file, "jpg", new Gio.Cancellable());
-                console.log(response);
-                Gio.File.new_for_path(file).delete(null);
-                this._createNotification("Pixabay Searcher", `Saved image as JPG`);
+            if (
+                (this._format === "png" && !file.endsWith(".png")) ||
+                (this._format === "jpg" && !file.endsWith(".jpg")) || 
+                (this._format === "webp" && !file.endsWith(".webp"))
+            ) {
+                try {
+                    const destination = await Conversor.convert(file, this._format, new Gio.Cancellable());
+                    console.log('[PSI]', `Conversor response: ${destination}`);
+                    Gio.File.new_for_path(file).delete(null);
+                    this._createNotification("Pixabay Searcher", `Saved image as ${destination}`);
+                } catch (e) {
+                    console.error('[PSI]', `Error converting image: ${e}`);
+                    this._createNotification("Pixabay Searcher", `Error converting image: ${e}`);
+                }
             }
         });
         this.add_child(downloadButton);
@@ -94,7 +98,7 @@ export default class ImageBox extends St.BoxLayout {
             source: systemSource,
             title: title,
             body: body,
-            gicon: new Gio.ThemedIcon({name: 'image-x-generic'}),
+            gicon: new Gio.ThemedIcon({ name: 'image-x-generic' }),
             iconName: 'image-x-generic',
         });
         systemSource.addNotification(notification);
