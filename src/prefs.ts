@@ -23,6 +23,7 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
         }
 
         window.add(this.buildGeneralPage());
+        window.add(this.buildPixabayPage());
         const about = new About(this);
         window.add(about);
     }
@@ -33,11 +34,33 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
             iconName: 'dialog-information-symbolic',
         });
 
+        const generalInfo = new Adw.PreferencesGroup({
+            title: _('General'),
+            description: _('Set General Info'),
+        });
+        generalPage.add(generalInfo);
+
+        const formats = [
+            ["no", "NO"], ["png", "PNG"], ["jpg", "JPG"]
+        ];
+        const format = new DropDownText(_("Format"), formats);
+
+
+        generalInfo.add(format);
+
+        return generalPage;
+    }
+    private buildPixabayPage(): Adw.PreferencesPage {
+        const pixabayPage = new Adw.PreferencesPage({
+            title: _('Pixabay'),
+            iconName: 'dialog-information-symbolic',
+        });
+
         const pixabayInfo = new Adw.PreferencesGroup({
             title: _('Pixabay'),
             description: _('Set Pixabay data'),
         });
-        generalPage.add(pixabayInfo);
+        pixabayPage.add(pixabayInfo);
 
         const apiKey = new Adw.EntryRow({
             title: _('API key'),
@@ -115,6 +138,6 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
         this._settings!.bind('color', color, 'selected', Gio.SettingsBindFlags.DEFAULT);
         this._settings!.bind('order', order, 'selected', Gio.SettingsBindFlags.DEFAULT);
 
-        return generalPage;
+        return pixabayPage;
     }
 }

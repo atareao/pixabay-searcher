@@ -8,6 +8,9 @@
 .DownloadButton {
     margin-right: 10px;
 }
+GtkDropDrown {
+    margin: 5px;
+}
 .LeftButton,
 .RightButton,
 .DownloadButton,

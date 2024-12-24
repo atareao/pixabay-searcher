@@ -6,6 +6,16 @@
       <summary>API key</summary>
       <description>Pixabay API key</description>
     </key>
+    <key name="directory" type="s">
+      <default>""</default>
+      <summary>Download directory</summary>
+      <description>Directory where the images will be downloaded</description>
+    </key>
+    <key name="format" type="s">
+        <default>"no"</default>
+        <summary>Image format</summary>
+        <description>Image format</description>
+    </key>
     <key name="lang" type="s">
       <default>"es"</default>
       <summary>Language</summary>

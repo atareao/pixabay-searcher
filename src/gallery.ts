@@ -6,16 +6,20 @@ import { PixabayImage } from './pixabay.js';
 import ImageBox from './imagebox.js';
 
 export default class Gallery extends PopupMenu.PopupBaseMenuItem {
+    _format: string;
+    _directory: string;
     _box: St.BoxLayout;
     static {
         GObject.registerClass(this);
     }
 
-    constructor({}) {
+    constructor({}, format: string, directory: string) {
         super({
             reactive: false,
             can_focus: false,
         });
+        this._format = format;
+        this._directory = directory
         this._box = new St.BoxLayout({
             vertical: true,
             reactive: false,
@@ -39,7 +43,8 @@ export default class Gallery extends PopupMenu.PopupBaseMenuItem {
         this._box.remove_all_children();
         this._box.destroy_all_children();
         images.forEach((image) => {
-            this._box.add_child(new ImageBox(image))
+            this._box.add_child(new ImageBox(image, this._format,
+                                             this._directory))
         });
     }
 

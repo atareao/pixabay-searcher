@@ -119,7 +119,7 @@ export class Pixabay {
                 const extension = image.imageURL.split('.').pop();
                 const file = Gio.File.new_for_path(`/tmp/${image.id}.${extension}`);
                 console.log("[PSI]", `Saving to: ${file.get_path()}`);
-                const response = await file.replace_contents_bytes_async(
+                const response = file.replace_contents_bytes_async(
                     data,
                     null,
                     false,

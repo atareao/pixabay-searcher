@@ -4,12 +4,15 @@ import Gio from 'gi://Gio';
 import Clutter from 'gi://Clutter';
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 import { Pixabay, PixabayImage } from './pixabay.js';
+import Conversor from './conversor.js';
 
 export default class ImageBox extends St.BoxLayout {
     static {
         GObject.registerClass(this);
     }
-    constructor(image: PixabayImage) {
+    _format: string;
+    _directory: string;
+    constructor(image: PixabayImage, format: string, directory: string) {
         super({
             vertical: false,
             //height: 150,
@@ -20,6 +23,8 @@ export default class ImageBox extends St.BoxLayout {
             can_focus: true,
             track_hover: true,
         });
+        this._format = format;
+        this._directory = directory
         const gicon = Gio.icon_new_for_string(image.previewURL);
         const size = image.previewWidth > image.previewHeight?image.previewWidth:image.previewHeight;
         const icon = new St.Icon({
@@ -63,10 +68,21 @@ export default class ImageBox extends St.BoxLayout {
             console.log(`[PSI] Downloading: ${image.imageURL}`);
             console.log(`[PSI] Downloading: ${image.id}`);
             const file = await Pixabay.download(image, new Gio.Cancellable());
-            if(file){
-                this._createNotification("Pixabay Searcher", `Downloaded image ${file}`);
-            }else{
+            if(!file){
                 this._createNotification("Pixabay Searcher", "Can NOT download image");
+                return;
+            }
+            this._createNotification("Pixabay Searcher", `Downloaded image ${file}`);
+            if(this._format === "PNG" && !file.endsWith(".png")){
+                const response = Conversor.convert(file, "png", new Gio.Cancellable());
+                console.log(response);
+                Gio.File.new_for_path(file).delete(null);
+                this._createNotification("Pixabay Searcher", `Saved image as PNG`);
+            }else if(this._format === "JPG" && !file.endsWith(".jpg")){
+                const response = Conversor.convert(file, "jpg", new Gio.Cancellable());
+                console.log(response);
+                Gio.File.new_for_path(file).delete(null);
+                this._createNotification("Pixabay Searcher", `Saved image as JPG`);
             }
         });
         this.add_child(downloadButton);
