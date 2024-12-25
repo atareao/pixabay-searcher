@@ -24,10 +24,8 @@ export default class FolderBox extends Adw.ActionRow {
         super({ title: title });
         this._button = Gtk.Button.new_with_label("Select folder");
         this._button.connect('clicked', () => {
-            console.log('[PSI]', 'button clicked');
 
             const dialog = new Gtk.FileDialog();
-            console.log('[PSI]', `dialog created: ${dialog}`);
             if(this._folder){
                 dialog.set_initial_folder(Gio.File.new_for_path(this._folder))
             }
@@ -35,9 +33,6 @@ export default class FolderBox extends Adw.ActionRow {
                 window,
                 new Gio.Cancellable(),
                 (source, result) => {
-                    console.log('[PSI]', 'select_folder callback');
-                    console.log('[PSI]', `source: ${source}`);
-                    console.log('[PSI]', `result: ${result}`);
                     if(source){
                         const selected = source.select_folder_finish(result);
                         if(selected){
