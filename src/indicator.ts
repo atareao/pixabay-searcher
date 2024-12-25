@@ -29,9 +29,9 @@ export default class Indicator extends PanelMenu.Button {
         const apiKey = extension.getSettings().get_string("pixabay-api-key");
         const lang = extension.getSettings().get_string("lang");
         const format = extension.getSettings().get_string("image-format");
-        const directory = extension.getSettings().get_string("directory");
+        const folder = extension.getSettings().get_string("folder");
         this._pixabay = new Pixabay(apiKey, lang);
-        this._gallery = new Gallery({}, format, directory);
+        this._gallery = new Gallery({}, format, folder);
 
         const icon = new St.Icon({
             gicon: getIcon('pixabay-symbolic'),

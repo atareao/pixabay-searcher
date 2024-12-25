@@ -9,7 +9,7 @@ export default class DropDownText extends Adw.ActionRow {
                 'selected': GObject.ParamSpec.string(
                     'selected',
                     'Selected',
-                    'A read-write int property',
+                    'A read-write string property',
                     GObject.ParamFlags.READWRITE,
                     "" 
                 ),
@@ -57,7 +57,7 @@ export default class DropDownText extends Adw.ActionRow {
         return this._combo ? this.getKey(this._combo.get_selected()) : null;
     }
 
-    set selected(item: string) {
+   set selected(item: string) {
         const position = this.getPosition(item);
         if (position && this._combo) {
             const model = this._combo.get_model();

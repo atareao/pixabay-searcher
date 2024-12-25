@@ -3,6 +3,7 @@ import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
 import { ExtensionPreferences,gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import DropDownText from './dropdowntext.js';
+import FolderBox from './folderbox.js';
 import About from './about.js';
 interface WindowSettingRegistry {
     _settings: Gio.Settings
@@ -22,13 +23,13 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
             iconTheme.add_search_path(iconsDirectory);
         }
 
-        window.add(this.buildGeneralPage());
+        window.add(this.buildGeneralPage(window));
         window.add(this.buildPixabayPage());
         const about = new About(this);
         window.add(about);
     }
 
-    private buildGeneralPage(): Adw.PreferencesPage {
+    private buildGeneralPage(window: Adw.PreferencesWindow): Adw.PreferencesPage {
         const generalPage = new Adw.PreferencesPage({
             title: _('General'),
             iconName: 'dialog-information-symbolic',
@@ -40,12 +41,17 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
         });
         generalPage.add(generalInfo);
 
+        const folder = new FolderBox(_("Download folder"), window);
+        generalInfo.add(folder);
+
         const formats = [
             ["no", _("None")], ["png", _("PNG")], ["jpg", _("JPG")],
             ["webp", _("WEBP")]
         ];
         const format = new DropDownText(_("Format"), formats);
         generalInfo.add(format);
+
+        this._settings!.bind('folder', folder, 'folder', Gio.SettingsBindFlags.DEFAULT);
         this._settings!.bind('image-format', format, 'selected', Gio.SettingsBindFlags.DEFAULT);
         return generalPage;
     }

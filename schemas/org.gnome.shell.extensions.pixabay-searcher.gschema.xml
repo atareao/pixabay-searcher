@@ -6,10 +6,10 @@
       <summary>API key</summary>
       <description>Pixabay API key</description>
     </key>
-    <key name="directory" type="s">
-      <default>""</default>
-      <summary>Download directory</summary>
-      <description>Directory where the images will be downloaded</description>
+    <key name="folder" type="s">
+        <default>"/tmp"</default>
+      <summary>Download folder</summary>
+      <description>Folder where the images will be downloaded</description>
     </key>
     <key name="image-format" type="s">
         <default>"no"</default>
