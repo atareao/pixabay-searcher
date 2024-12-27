@@ -1,5 +1,6 @@
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import { debug } from './utils.js';
 
 Gio._promisify(Gio.Subprocess.prototype, 'communicate_utf8_async',
     'communicate_utf8_finish');
@@ -11,9 +12,9 @@ export default class Conversor {
             throw new Error('ImageMagick not found');
         }
         const pattern = /\..*$/gm;
-        console.log('[PSI]', `pattern: ${pattern}`);
+        debug(`pattern: ${pattern}`);
         const destination = source.replace(pattern, `.${extension}`)
-        console.log('[PSI]', `from ${source} to ${destination}`);
+        debug(`from ${source} to ${destination}`);
         const proc = new Gio.Subprocess({
             argv: [magick, source, destination],
             flags: Gio.SubprocessFlags.STDOUT_PIPE |
@@ -21,9 +22,9 @@ export default class Conversor {
         });
         proc.init(cancellable);
         const [stdout, stderr] = await proc.communicate_utf8_async(null, cancellable);
-        console.log('[PSI]', `stdout ${stdout}`);
-        console.log('[PSI]', `stderr ${stderr}`);
-        console.log('[PSI]', `successful ${proc.get_successful()}`);
+        debug(`stdout ${stdout}`);
+        debug(`stderr ${stderr}`);
+        debug(`successful ${proc.get_successful()}`);
         if(proc.get_successful() && !stderr){
             return destination;
         }

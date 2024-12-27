@@ -2,15 +2,19 @@
 .SearchButton {
     margin-left: 30px;
 }
+
 .LeftButton {
     margin-right: 30px;
 }
+
 .DownloadButton {
     margin-right: 10px;
 }
+
 GtkDropDrown {
     margin: 5px;
 }
+
 .LeftButton,
 .RightButton,
 .DownloadButton,
@@ -21,10 +25,12 @@ GtkDropDrown {
     height: 32px;
     border: 1px solid #282828;
 }
-.LeftButton:disabled{
-  background-color: #ff0000;
-  color: #ff0000;
+
+.LeftButton:disabled {
+    background-color: #ff0000;
+    color: #ff0000;
 }
+
 .LeftButton:hover,
 .LeftButton:focus,
 .RightButton:hover,
@@ -33,24 +39,29 @@ GtkDropDrown {
 .DownloadButton:focus,
 .SearchButton:hover,
 .SearchButton:focus {
-  background-color: rgba(120, 120, 120, 1);
-  color: #ffffff;
+    background-color: rgba(120, 120, 120, 1);
+    color: #ffffff;
 }
+
 .ImageBox {
     background-color: #3c3c3c;
 }
+
 .ImageBox,
 .ImageContainer,
 .Image {
     padding: 0px;
     margin: 0px;
 }
-.ImageBox:hover{
+
+.ImageBox:hover {
     background-color: rgba(120, 120, 120, 1);
 }
-.ScrollView{
+
+.ScrollView {
     max-height: 500px;
 }
+
 .ImageBox {
     margin-bottom: 10px;
 }

@@ -23,7 +23,7 @@ export default class About extends Adw.PreferencesPage {
         });
         const extensionName = preferences.metadata.name;
         const ownerName = "Lorenzo Carbonell <a.k.a. atareao>";
-        const iconName = "pixabay-simbolic";
+        const iconName = "pixabay-symbolic";
         const extensionsVersion = preferences.metadata.version;
         const copyrihtYear = "2024";
         const copyright = `© ${copyrihtYear} ${ownerName}`;
@@ -87,7 +87,7 @@ export default class About extends Adw.PreferencesPage {
         });
         this._mainPage.append(secondGroup);
 
-        secondGroup.add(this._link("bhc-translation-symbolic", _("Translations by:"), "https://www.transifex.com/"));
+        secondGroup.add(this._link("language-symbolic", _("Translations by:"), "https://www.transifex.com/"));
         this._setContactGroup();
         this._setContactPage();
     }
@@ -149,12 +149,11 @@ export default class About extends Adw.PreferencesPage {
         secondGroup.add(this._link("youtube-symbolic", _("Youtube"), "https://www.youtube.com/@atareao"));
         secondGroup.add(this._link("github-symbolic", _("GitHub"), "https://github.com/atareao"));
         secondGroup.add(this._link("telegram-symbolic", _("Telegram"), "https://t.me/atareao"));
-        secondGroup.add(this._link("mastodon-symbolic", _("Mastodon"), "https://mastodon.social/atareao"));
+        secondGroup.add(this._link("mastodon-symbolic", _("Mastodon"), "https://mastodon.social/@atareao"));
         secondGroup.add(this._link("email-symbolic", _("Contact"), "https://atareao.es/contactar"));
     }
 
     _link(iconName: string, label: string, link: string): Adw.ActionRow{
-        console.log(iconName, label, link);
         const actionRow = new Adw.ActionRow({
             title: label,
             activatable: true,

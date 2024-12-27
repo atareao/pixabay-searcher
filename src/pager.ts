@@ -2,7 +2,7 @@ import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
-import { getIcon } from './utils.js';
+import { debug, getIcon } from './utils.js';
 
 export default class Pager extends PopupMenu.PopupBaseMenuItem {
     static {
@@ -94,7 +94,7 @@ export default class Pager extends PopupMenu.PopupBaseMenuItem {
     }
 
     setPage(page: number) {
-        console.log(`[PSI] Setting page: ${page}`);
+        debug(`[PSI] Setting page: ${page}`);
         const oldPage = this._page;
         this._page = page;
         if (this._page <= 1) {
@@ -115,13 +115,18 @@ export default class Pager extends PopupMenu.PopupBaseMenuItem {
         }
         this._entry.set_text(this._page.toString());
         if (oldPage != this._page) {
-            console.log(`[PSI] Page changed: ${this._page}`);
+            debug(`[PSI] Page changed: ${this._page}`);
             this.emit('page-changed', this._page);
         }
     }
     setPages(pages: number) {
-        console.log(`[PSI] Setting pages: ${pages}`);
+        debug(`[PSI] Setting pages: ${pages}`);
         this._pages = pages;
         this.setPage(this._page);
+    }
+
+    setEnable(enable: boolean) {
+        this._leftButton.set_reactive(enable);
+        this._rightButton.set_reactive(enable);
     }
 }

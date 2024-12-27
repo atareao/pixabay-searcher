@@ -1,6 +1,7 @@
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
+import Gdk from 'gi://Gdk';
 import { ExtensionPreferences,gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import DropDownText from './dropdowntext.js';
 import FolderBox from './folderbox.js';
@@ -9,6 +10,7 @@ interface WindowSettingRegistry {
     _settings: Gio.Settings
 }
 
+
 export default class PixabaySearcherPreferences extends ExtensionPreferences {
     _settings?: Gio.Settings
 
@@ -16,17 +18,26 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
     override async fillPreferencesWindow(window: Adw.PreferencesWindow & WindowSettingRegistry) {
         this._settings = this.getSettings();
 
-        const iconTheme = Gtk.IconTheme.get_for_display(window.get_display());
-        const iconsDirectory = this.dir.get_child('icons').get_path();
-        if(iconsDirectory){
-            console.log(`Adding ${iconsDirectory} to the icon theme search path`);
-            iconTheme.add_search_path(iconsDirectory);
+        const display = Gdk.Display.get_default();
+        this.debug(display);
+        if(display){
+            const iconTheme = Gtk.IconTheme.get_for_display(display);
+            this.debug(iconTheme);
+            if (!iconTheme.get_search_path()?.includes(`${this.path}/icons`)) {
+                iconTheme.add_search_path(`${this.path}/icons`);
+            }
+            this.debug(iconTheme.get_search_path());
         }
 
         window.add(this.buildGeneralPage(window));
         window.add(this.buildPixabayPage());
         const about = new About(this);
         window.add(about);
+    }
+    private debug(message: any) {
+        if(this._settings?.get_boolean('debug')){
+            console.debug(`[PSI] ${message}`);
+        }
     }
 
     private buildGeneralPage(window: Adw.PreferencesWindow): Adw.PreferencesPage {
@@ -51,8 +62,14 @@ export default class PixabaySearcherPreferences extends ExtensionPreferences {
         const format = new DropDownText(_("Format"), formats);
         generalInfo.add(format);
 
+        const debugRow = new Adw.SwitchRow({
+            title: _('Debug'),
+        });
+        generalInfo.add(debugRow);
+
         this._settings!.bind('folder', folder, 'folder', Gio.SettingsBindFlags.DEFAULT);
         this._settings!.bind('image-format', format, 'selected', Gio.SettingsBindFlags.DEFAULT);
+        this._settings!.bind('debug', debugRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         return generalPage;
     }
     private buildPixabayPage(): Adw.PreferencesPage {

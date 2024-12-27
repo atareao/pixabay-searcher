@@ -8,7 +8,7 @@ import { Pixabay } from './pixabay.js';
 import Gallery from './gallery.js';
 import Pager from './pager.js';
 import SearchBox from './searchbox.js'
-import { getIcon } from './utils.js';
+import { getIcon, debug } from './utils.js';
 
 export default class Indicator extends PanelMenu.Button {
     _extension: Extension;
@@ -41,7 +41,7 @@ export default class Indicator extends PanelMenu.Button {
         extension.getSettings().connect('changed', () => {
             const apiKey = extension.getSettings().get_string("pixabay-api-key");
             const lang = extension.getSettings().get_string("lang");
-            console.log(`[PSI] Settings changed: ${apiKey} - ${lang}`);
+            debug(`[PSI] Settings changed: ${apiKey} - ${lang}`);
             this._pixabay = new Pixabay(apiKey, lang);
         });
         this._pager = new Pager(1);
@@ -51,7 +51,8 @@ export default class Indicator extends PanelMenu.Button {
         (this.menu as PopupMenu.PopupMenu).addMenuItem(this._gallery);
 
         this._searchBox.connect('new-search', async (_entry, text) => {
-            console.log(`[PSI] Searching for: ${text}`);
+            this._searchBox.add_style_class_name("Loading");
+            debug(`[PSI] Searching for: ${text}`);
             if(text == this._search){
                 this._pager.incPage();
             }else{
@@ -68,7 +69,9 @@ export default class Indicator extends PanelMenu.Button {
     }
 
     private async search(searchText: string): Promise<void> {
-            console.log(`[PSI] Searching for: ${searchText}`);
+            debug(`[PSI] Searching for: ${searchText}`);
+            this._searchBox.play();
+            this._pager.setEnable(false);
             const page = this._pager.getPage();
             const imageType = this._extension.getSettings().get_string("image-type");
             const orientation = this._extension.getSettings().get_string("orientation");
@@ -80,8 +83,10 @@ export default class Indicator extends PanelMenu.Button {
                 color, new Gio.Cancellable());
             if(response != null) {
                 this._pager.setPages(Math.ceil(response.totalHits / 20));
-                console.log(`[PSI] Found: ${response.totalHits}`);
+                debug(`[PSI] Found: ${response.totalHits}`);
                 this._gallery.setImages(response.hits);
             }
+            this._searchBox.stop();
+            this._pager.setEnable(true);
     }
 }

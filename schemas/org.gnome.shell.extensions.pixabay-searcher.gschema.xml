@@ -11,6 +11,11 @@
       <summary>Download folder</summary>
       <description>Folder where the images will be downloaded</description>
     </key>
+    <key name="debug" type="b">
+      <default>false</default>
+      <summary>Debug</summary>
+      <description>Debug</description>
+    </key>
     <key name="image-format" type="s">
         <default>"no"</default>
         <summary>Image format</summary>

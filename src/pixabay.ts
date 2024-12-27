@@ -1,6 +1,7 @@
 import GLib from "gi://GLib";
 import Gio from "gi://Gio";
 import Soup from "gi://Soup?version=3.0";
+import { debug } from "./utils.js";
 
 /*
  * Asynchronous programming with GJS
@@ -58,7 +59,7 @@ export class Pixabay {
                  orientation: string, order: string, category: string,
                  color: string, cancellable: Gio.Cancellable
                 ): Promise<PixabayResponse | null>{
-        console.log("[PSI]", `Looking for: ${query}`);
+        debug(`Looking for: ${query}`);
         try{
             const session = new Soup.Session();
             let params = new Map([
@@ -78,7 +79,7 @@ export class Pixabay {
                 params.set("color", color);
             }
             const encoded_params = Soup.form_encode_hash(Object.fromEntries(params));
-            console.log("[PSI]", `Params: ${encoded_params}`);
+            debug(`Params: ${encoded_params}`);
             const message = Soup.Message.new_from_encoded_form(
                 'GET',
                 this.baseUrl,
@@ -100,10 +101,10 @@ export class Pixabay {
     }
 
 
-    static async download(image: PixabayImage, cancellable: Gio.Cancellable): Promise<string|null>{
-        console.log("[PSI]", `Downloading: ${image.tags}`);
-        console.log("[PSI]", `Downloading: ${image.imageURL}`);
-        console.log("[PSI]", `Downloading: ${image.id}`);
+    static async download(image: PixabayImage, directory: string, cancellable: Gio.Cancellable): Promise<string|null>{
+        debug(`Downloading: ${image.tags}`);
+        debug(`Downloading: ${image.imageURL}`);
+        debug(`Downloading: ${image.id}`);
         try{
             const session = new Soup.Session();
             const message = Soup.Message.new_from_encoded_form(
@@ -117,15 +118,15 @@ export class Pixabay {
             if(bytes !== null){
                 const data = bytes.get_data() as Uint8Array;
                 const extension = image.imageURL.split('.').pop();
-                const file = Gio.File.new_for_path(`/tmp/${image.id}.${extension}`);
-                console.log("[PSI]", `Saving to: ${file.get_path()}`);
+                const file = Gio.File.new_for_path(`${directory}/${image.id}.${extension}`);
+                debug(`Saving to: ${file.get_path()}`);
                 const response = file.replace_contents_bytes_async(
                     data,
                     null,
                     false,
                     Gio.FileCreateFlags.REPLACE_DESTINATION,
                     null);
-                console.log("[PSI]", "Response: ", response);
+                debug(`Response: ${response}`);
                 return file.get_path();
             }
         }catch(e){
